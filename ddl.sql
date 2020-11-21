@@ -2,9 +2,11 @@ CREATE TABLE Books (
     BookID INT NOT NULL AUTO_INCREMENT,
     Title VARCHAR(50),
     ISBN VARCHAR(30),
-    GENRE VARCHAR(30),
+    Genre VARCHAR(30),
     Authors VARCHAR(100),
+    BranchID INT,
     PRIMARY KEY (BookID)
+    FOREIGN KEY(BranchID) REFERENCES Branch(BranchID)
 );
 
 CREATE TABLE Members(
@@ -17,7 +19,7 @@ CREATE TABLE Members(
     Gender VARCHAR(30),
     Street VARCHAR(50),
     City VARCHAR(50),
-    State VARCHAR(3),
+    StateName VARCHAR(3),
     Zip VARCHAR(20),
     PRIMARY KEY (MemberID)
 );
@@ -43,19 +45,26 @@ CREATE TABLE CheckIn (
     FOREIGN KEY(MemberID) REFERENCES Members(BookID)
 );
 
+CREATE TABLE Job (
+    JobID INT NOT NULL AUTO_INCREMENT,
+    JobTitle VARCHAR(30),
+    JobDescription VARCHAR(100),
+    PRIMARY KEY(JobID)
+);
+
 CREATE TABLE Employees (
 	EmployeeID INT NOT NULL AUTO_INCREMENT,
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
     Email VARCHAR(50),
-    JobTitle VARCHAR(50),
+    JobID INT,
     Street VARCHAR(50),
     City VARCHAR(50),
-    State VARCHAR(3),
+    StateName VARCHAR(3),
     Zip VARCHAR(20),
-    BranchID INT,
     PRIMARY KEY(EmployeeID),
-    FOREIGN KEY(BranchID) REFERENCES Branch(BranchID)
+    FOREIGN KEY(BranchID) REFERENCES Branch(BranchID),
+    FOREIGN KEY(JobID) REFERENCES Job(JobID)
     );
     
 CREATE TABLE Branch (
@@ -70,6 +79,14 @@ CREATE TABLE Branch (
     PRIMARY KEY(BranchID),
     FOREIGN KEY(BranchManager) REFERENCES Employees(EmployeeID),
     FOREIGN KEY(RegionID) REFERENCES Region(RegionID)
+);
+
+CREATE TABLE WorksAt (
+    EmployeeID INT,
+    BranchID INT,
+    PRIMARY KEY(EmployeeID, BranchID),
+    FOREIGN KEY(EmployeeID) REFERENCE Employee(EmployeeID),
+    FOREIGN KEY(BranchID) REFERENCES Branch(BranchID),
 );
 
 CREATE TABLE Region (
